@@ -8,7 +8,7 @@
 
 	<body>
 		<canvas id="canvasBubbles" width="800" height="800">Canvas not supported</canvas>
-		<img src="images/bubble.jpeg" id="bubble" >
+		<img src="images/bubblet.png" id="bubble" >
 	</body>
 
 </html>
