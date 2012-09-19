@@ -1,33 +1,49 @@
-var canvas, context;
-var x = 10;
-var y = 10;
-var dirX = 1;
-var dirY = 1;
-
-// window.onload = function(){
-//         gameStart();
-// };
-
-function gameStart(){
-	console.log('starting animation');
-    window.setInterval(drawImage, 25);
+function Game(){
+	this.canvas;
+	this.context;
+	this.x = 10;
+	this.y = 10;
+	this.dirX = 1;
+	this.dirY = 1;
+	this.width = 800;
+	this.height = 800;
 }
 
+GAME = new Game();
 
-function drawImage(){
-	console.log('This is x: ' + x);
-	console.log('This is y: ' + y);
 
-	canvas  = document.getElementById("canvasRain");
-    context = canvas.getContext("2d");
+window.onload = function(){
+    GAME.gameStart();
+};
+
+GAME.gameStart = function()
+{
+	console.log('starting animation');
+    window.setInterval(this.drawImage, 25);
+}
+
+GAME.drawImage = function()
+{
+	console.log('This is x: ' + GAME.x);
+	console.log('This is y: ' + GAME.y);
+
+	GAME.canvas  = document.getElementById("canvasBubbles");
+    GAME.context = GAME.canvas.getContext("2d");
+
+    //Clear canvas befor redrawing image
+    GAME.context.clearRect(GAME.x, GAME.y, GAME.width, GAME.height);
+
+	//Get image and draw to screen
 	var img = document.getElementById("bubble");
-	context.drawImage(img,x,y);
+	GAME.context.drawImage(img, GAME.x, GAME.y);
 
-	y += dirY;
+	//Set up the y for the next time we draw image
+	GAME.y += GAME.dirY;
 
-	if(y > 300){
-		y = 10;
+	if(GAME.y > 300){
+		GAME.y = 10;
 	}
+
 	return true;
 
 }
