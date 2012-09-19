@@ -7,9 +7,13 @@ var flakeArray = [];
 var flakeTimer = null;
 var maxFlakes = 200; // Here you may set max flackes to be created
 
+window.onload = function(){
+    init();
+};
+
 function init(){
     //Canvas on Page
-    canvas = document.getElementById('canvasRain');
+    canvas = document.getElementById('canvasBubbles');
     context = canvas.getContext("2d");
     //Buffer Canvas
     bufferCanvas = document.createElement("canvas");
@@ -58,24 +62,24 @@ function Update() {
 }
 
 function Flake() {
-        this.x = Math.round(Math.random() * context.canvas.width);
-        this.y = -10;
-        this.drift = Math.random();
-        this.speed = Math.round(Math.random() * 5) + 1;
-        this.width = (Math.random() * 3) + 2;
-        this.height = this.width;
+    this.x = Math.round(Math.random() * context.canvas.width);
+    this.y = -10;
+    this.drift = Math.random();
+    this.speed = Math.round(Math.random() * 5) + 1;
+    this.width = (Math.random() * 3) + 2;
+    this.height = this.width;
+}
+function Draw() {
+    context.save();
+
+    blank();
+
+    for (var i = 0; i < flakeArray.length; i++) {
+        bufferCanvasCtx.fillStyle = "white";
+        bufferCanvasCtx.fillRect(flakeArray[i].x, flakeArray[i].y, flakeArray[i].width, flakeArray[i].height);
     }
-    function Draw() {
-        context.save();
-
-        blank();
-
-        for (var i = 0; i < flakeArray.length; i++) {
-            bufferCanvasCtx.fillStyle = "white";
-            bufferCanvasCtx.fillRect(flakeArray[i].x, flakeArray[i].y, flakeArray[i].width, flakeArray[i].height);
-        }
 
 
-        context.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height);
-        context.restore();
-    }
+    context.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height);
+    context.restore();
+}
