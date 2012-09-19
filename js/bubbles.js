@@ -9,7 +9,7 @@ function Game(){
 	this.dirY = 1;
 	this.bubbleArray = [];
 	this.bubbleTimer = null;
-	this.maxBubbles = 25;
+	this.maxBubbles = 200;
 }
 
 GAME = new Game();
@@ -35,7 +35,7 @@ GAME.gameStart = function()
 
     GAME.draw();
 
-    window.setInterval(GAME.animate, 25);
+    window.setInterval(GAME.animate, 30);
 }
 
 GAME.animate = function()
