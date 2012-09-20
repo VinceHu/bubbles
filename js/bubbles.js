@@ -31,6 +31,7 @@ GAME.gameStart = function()
     GAME.bufferCanvasCtx.canvas.width = GAME.context.canvas.width;
     GAME.bufferCanvasCtx.canvas.height = GAME.context.canvas.height;
 
+	//Add bubbles to array
     GAME.bubbleTimer = setInterval(GAME.addBubble, 200);
 
     GAME.draw();
@@ -40,25 +41,38 @@ GAME.gameStart = function()
 
 GAME.animate = function()
 {
+	//listen for clicks and check if button was clicked
+	GAME.canvas.addEventListener('click', GAME.bubblePop, false);
+	
 	GAME.update();
 	GAME.draw();
 
 }
 
+GAME.nuke = function()
+{
+	GAME.bubbleArray = [];
+}
+
+GAME.bubblePop = function(ev)
+{
+	var clickX = ev.clientX - GAME.canvas.offsetLeft;
+	var clickY = ev.clientY - GAME.canvas.offsetTop;
+	// console.log('mouse was clicked here ' + clickX + ', ' + clickY);
+	
+	//loop through array to see if I clicked a bubble
+	for (var i = 0; i < GAME.bubbleArray.length; i++) {
+        if(clickX >= GAME.bubbleArray[i].x && clickX <= GAME.bubbleArray[i].x + GAME.bubbleArray[i].width && clickY >= GAME.bubbleArray[i].y && clickY <= GAME.bubbleArray[i].y + GAME.bubbleArray[i].height){
+        	// alert('you clicked a bubble');
+        	GAME.bubbleArray.splice(i, 1);
+        }else{
+        	//sorry you did not click a bubble
+        }
+    }
+}
+
 GAME.update = function()
 {
-	// console.log('This is x: ' + GAME.x);
-	// console.log('This is y: ' + GAME.y);
-
-	//Clear canvas befor redrawing image
-    // GAME.context.clearRect(GAME.x, GAME.y, GAME.canvas.width, GAME.canvas.height);
-
-	// Set up the y for the next time we draw image
-	// GAME.y += GAME.dirY;
-
-	// if(GAME.y > 300){
-	// 	GAME.y = 10;
-	// }
 
 	for (var i = 0; i < GAME.bubbleArray.length; i++) {
         if (GAME.bubbleArray[i].y < GAME.context.canvas.height){
@@ -86,10 +100,7 @@ GAME.draw = function()
 	var img = document.getElementById("bubble");
 
 	for (var i = 0; i < GAME.bubbleArray.length; i++) {
-        // bufferCanvasCtx.fillStyle = "white";
-        // bufferCanvasCtx.fillRect(flakeArray[i].x, flakeArray[i].y, flakeArray[i].width, flakeArray[i].height);
         GAME.bufferCanvasCtx.drawImage(img, GAME.bubbleArray[i].x, GAME.bubbleArray[i].y, GAME.bubbleArray[i].width, GAME.bubbleArray[i].height);
-        // GAME.context.drawImage(img, GAME.x, GAME.y);
     }
 
 	GAME.context.drawImage(GAME.bufferCanvas, 0, 0, GAME.bufferCanvas.width, GAME.bufferCanvas.height);
@@ -120,6 +131,5 @@ function BUBBLE()
 	this.drift = Math.random();
 	this.speed = Math.round(Math.random() * 5) + 1;
 	this.width = (Math.random() * 100) + 2;
-	// this.width = 20;
     this.height = this.width;
 }
