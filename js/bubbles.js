@@ -36,17 +36,19 @@ GAME.gameStart = function()
 	//Add bubbles to array
     GAME.bubbleTimer = setInterval(GAME.addBubble, 200);
 
+	//Draw first round of bubbles to screen
     GAME.draw();
+    
+    //listen for clicks and check if button was clicked
+	GAME.canvas.addEventListener('mousedown', GAME.bubblePop, false);
+	GAME.canvas.addEventListener('touchstart', GAME.bubbleTouchPop, false);
 
+	//Now start the animation loop
     window.setInterval(GAME.animate, 30);
 }
 
 GAME.animate = function()
-{
-	//listen for clicks and check if button was clicked
-	GAME.canvas.addEventListener('mousedown', GAME.bubblePop, false);
-	GAME.canvas.addEventListener('touchstart', GAME.bubbleTouchPop, false);
-	
+{	
 	GAME.update();
 	GAME.draw();
 
@@ -77,6 +79,7 @@ GAME.bubblePop = function(event)
 
 GAME.pop = function(clickX, clickY)
 {
+	var popped = false;
 	//loop through array to see if I clicked a bubble
 	for (var i = 0; i < GAME.bubbleArray.length; i++) {
         if(clickX >= GAME.bubbleArray[i].x && clickX <= GAME.bubbleArray[i].x + GAME.bubbleArray[i].width && clickY >= GAME.bubbleArray[i].y && clickY <= GAME.bubbleArray[i].y + GAME.bubbleArray[i].height){
@@ -84,11 +87,15 @@ GAME.pop = function(clickX, clickY)
         	GAME.bubbleArray.splice(i, 1);
         	GAME.poppedBubbles++;
         	console.log('Have popped this many bubbles ' + GAME.poppedBubbles);
+        	
+        	popped = true;
         	break;
-        }else{
-        	console.log("You have missed this many bubbles " + GAME.missedBubbles);
-        	GAME.missedBubbles++;
         }
+    }
+    
+    if(popped === false){
+    	GAME.missedBubbles++;
+    	console.log('You have missed this many bubbles ' + GAME.missedBubbles);
     }
 }
 
