@@ -10,6 +10,8 @@ function Game(){
 	this.bubbleArray = [];
 	this.bubbleTimer = null;
 	this.maxBubbles = 200;
+	this.poppedBubbles = 0;
+	this.missedBubbles = 0;
 }
 
 GAME = new Game();
@@ -42,7 +44,8 @@ GAME.gameStart = function()
 GAME.animate = function()
 {
 	//listen for clicks and check if button was clicked
-	GAME.canvas.addEventListener('click', GAME.bubblePop, false);
+	GAME.canvas.addEventListener('mousedown', GAME.bubblePop, false);
+	GAME.canvas.addEventListener('touchstart', GAME.bubbleTouchPop, false);
 	
 	GAME.update();
 	GAME.draw();
@@ -54,19 +57,37 @@ GAME.nuke = function()
 	GAME.bubbleArray = [];
 }
 
-GAME.bubblePop = function(ev)
+GAME.bubbleTouchPop = function(event)
 {
-	var clickX = ev.clientX - GAME.canvas.offsetLeft;
-	var clickY = ev.clientY - GAME.canvas.offsetTop;
-	// console.log('mouse was clicked here ' + clickX + ', ' + clickY);
+	var touchX = event.targetTouches[0].pageX - GAME.canvas.offsetLeft;
+	var touchY = event.targetTouches[0].pageY - GAME.canvas.offsetTop;
 	
+	//Now pop a bubble
+	GAME.pop(touchX, touchY);
+}
+
+GAME.bubblePop = function(event)
+{
+	var clickX = event.clientX - GAME.canvas.offsetLeft;
+	var clickY = event.clientY - GAME.canvas.offsetTop;
+	
+	//Now pop a bubble
+	GAME.pop(clickX, clickY);
+}
+
+GAME.pop = function(clickX, clickY)
+{
 	//loop through array to see if I clicked a bubble
 	for (var i = 0; i < GAME.bubbleArray.length; i++) {
         if(clickX >= GAME.bubbleArray[i].x && clickX <= GAME.bubbleArray[i].x + GAME.bubbleArray[i].width && clickY >= GAME.bubbleArray[i].y && clickY <= GAME.bubbleArray[i].y + GAME.bubbleArray[i].height){
         	// alert('you clicked a bubble');
         	GAME.bubbleArray.splice(i, 1);
+        	GAME.poppedBubbles++;
+        	console.log('Have popped this many bubbles ' + GAME.poppedBubbles);
+        	break;
         }else{
-        	//sorry you did not click a bubble
+        	console.log("You have missed this many bubbles " + GAME.missedBubbles);
+        	GAME.missedBubbles++;
         }
     }
 }
